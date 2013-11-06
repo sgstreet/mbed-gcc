@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for repo in $(find $REPOSITORY_ROOT -name "*.git"); do
+	echo updating $(basename $repo) from $(git --git-dir=$repo config remote.origin.url)
+	git --git-dir=$repo fetch -p
+done

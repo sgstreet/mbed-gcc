@@ -1,0 +1,21 @@
+export WORKSPACE=${WORKSPACE:-$PWD}
+export PROJECT_ROOT=$WORKSPACE
+export REPOSITORY_ROOT=$WORKSPACE/repositories
+export TOOLS_ROOT=$WORKSPACE/local
+export IMAGE_ROOT=$WORKSPACE/images
+export BUILD_ROOT=$WORKSPACE/build
+export CROSS_ROOT=${WORKSPACE}/rootfs
+
+export PATH=$PATH:$TOOLS_ROOT/bin
+
+alias home='cd $WORKSPACE'
+
+if [[ "$(which eclipse)"  != "" ]]; then
+	alias ide='eclipse $WORKSPACE/eclipse&'
+fi
+
+if [[ "$(which gedit)" != "" ]]; then
+	alias edit='gedit'
+else
+	alias edit='nano'
+fi

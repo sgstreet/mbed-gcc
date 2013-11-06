@@ -1,0 +1,16 @@
+#!/bin/bash
+
+mkdir -p $REPOSITORY_ROOT
+while read repo; do
+	if [[ $repo == "" ]]; then
+		continue
+	fi
+	if [[ ! -e "$REPOSITORY_ROOT/$(basename $repo)" ]]; then
+		echo "mirroring $repo"
+		if [[ ! $repo =~ /*.git$ ]]; then
+			ext=".git"
+		fi
+		git clone --mirror $repo $REPOSITORY_ROOT/$(basename $repo)$ext
+	fi
+done < ${WORKSPACE}/project/external-projects
+

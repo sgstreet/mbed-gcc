@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# Copyright (C) 2012 Red Rocket Computing
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# setup-workspace
+# Created on: 18/06/2012
+# Author: Stephen Street
+#
+
+if [ -n "$1" ]; then
+	export WORKSPACE=$(readlink -e $1)
+else
+	export WORKSPACE=$(readlink -e $PWD)
+fi
+
+pushd $WORKSPACE &> /dev/null
+
+echo "workspace = $WORKSPACE"
+if [ ! -e "workspace-rc" ]; then
+	echo "missing $PWD/workspace-rc"
+	exit 1	
+fi
+
+bash --rcfile $WORKSPACE/workspace-rc 
+
+popd &> /dev/null
