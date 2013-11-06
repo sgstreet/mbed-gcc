@@ -28,8 +28,6 @@ export IMAGE_ROOT ?= ${PROJECT_ROOT}/images
 export BUILD_ROOT ?= ${PROJECT_ROOT}/build
 export CROSS_ROOT ?= ${PROJECT_ROOT}/rootfs
 
-export TARGET_VERSION ?= trunk
-
 export MKSUPPORT_PATH := ${PROJECT_ROOT}/tools/mksupport
 export MKTARGETS := ${MKSUPPORT_PATH}/targets.mk
 
@@ -44,9 +42,11 @@ $(wildcard ${REPOSITORY_ROOT}/*.git):
 
 .PHONY: distclean
 distclean:
-	rm -rf ${BUILD_ROOT} ${CROSS_ROOT} ${IMAGE_ROOT} ${TOOLS_ROOT}
+	@echo "target disabled"
+#	rm -rf ${BUILD_ROOT} ${CROSS_ROOT} ${IMAGE_ROOT} ${TOOLS_ROOT}
 
 .PHONY: realclean
 realclean: distclean
-	rm -rf ${REPOSITORY_ROOT} ${PROJECT_ROOT}/sources
+	@echo "target disabled"
+#	rm -rf ${REPOSITORY_ROOT} ${PROJECT_ROOT}/sources
 

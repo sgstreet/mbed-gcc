@@ -1,13 +1,4 @@
-targets: compilers
-
-compilers: tools
-
-#targets: ${IMAGE_ROOT}/clang-${TARGET_VERSION}.tar.bz2
-
-#${IMAGE_ROOT}/clang-${TARGET_VERSION}.tar.bz2: ${REPOSITORY_ROOT} compiler
-#	echo test $(wildcard ${REPOSITORY_ROOT}/*.git)
-#	mkdir -p ${IMAGE_ROOT}
-#	tar -cvj --exclude=src --exclude=tmp --exclude=lib/c++ -f ${IMAGE_ROOT}/clang-${TARGET_VERSION}.tar.bz2 -C ${BUILD_ROOT}/compiler/final .
+targets:
 
 ${REPOSITORY_ROOT}:
 	mkdir -p ${REPOSITORY_ROOT}
