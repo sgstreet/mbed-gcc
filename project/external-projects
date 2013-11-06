@@ -1,0 +1,6 @@
+git://github.com/mbedmicro/CMSIS-DAP
+git://github.com/adamgreen/gcc4mbed
+git://github.com/mbedmicro/mbed
+git://github.com/adamgreen/mri
+git://github.com/mbedmicro/pyOCD
+
