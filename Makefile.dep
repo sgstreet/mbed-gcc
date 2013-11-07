@@ -1,4 +1,4 @@
-targets:
+targets: sys
 
 ${REPOSITORY_ROOT}:
 	mkdir -p ${REPOSITORY_ROOT}

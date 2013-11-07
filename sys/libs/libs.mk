@@ -14,11 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
-# tools.mk
-# Created on: 06/07/12
-# Author: Stephen Street
+# libs.mk
+# Created on: 05/11/13
+# Author: Stephen Street (stephen@redrocketcomputing.com)
 #
 
-SUBDIRS = 
-
 include ${MKTARGETS}
+

@@ -21,6 +21,7 @@
 
 EXCLUDEGOALS = distclean realclean update $(wildcard ${REPOSITORY_ROOT}/*.git)
 
+export WORKSPACE ?= ${CURDIR}
 export PROJECT_ROOT ?= ${CURDIR}
 export REPOSITORY_ROOT ?= ${PROJECT_ROOT}/repositories
 export TOOLS_ROOT ?= ${PROJECT_ROOT}/local

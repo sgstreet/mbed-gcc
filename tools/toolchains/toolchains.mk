@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2012 Red Rocket Computing
+# Copyright (C) 2013 Red Rocket Computing
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,11 +14,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
-# tools.mk
-# Created on: 06/07/12
-# Author: Stephen Street
+# external-templage.mk
+# Created on: 30/10/13
+# Author: Stephen Street (stephen@redrocketcomputing.com)
 #
 
-SUBDIRS = 
+where-am-i := ${CURDIR}/$(lastword $(subst $(lastword ${MAKEFILE_LIST}),,${MAKEFILE_LIST}))
 
-include ${MKTARGETS}
+# Setup up default goal
+ifeq ($(.DEFAULT_GOAL),)
+	.DEFAULT_GOAL := all
+endif
+
+SOURCE_PATH := ${CURDIR}
+BUILD_PATH := $(subst ${PROJECT_ROOT},${BUILD_ROOT},${SOURCE_PATH})
+
+all:
+
+clean: 
+
+distclean:
+	rm -rf ${BUILD_PATH}
+
+
+
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+mkdir -p $TOOLS_ROOT/bin
+pushd $TOOLS_ROOT/bin &> /dev/null
+for binary in $(ls $TOOLS_ROOT/libexec/$1/bin); do
+	ln -sf ../libexec/$1/bin/$binary $binary 
+done
+popd &> /dev/null
+
+mkdir -p $TOOLS_ROOT/etc/
+touch $TOOLS_ROOT/etc/softlinked-$1
