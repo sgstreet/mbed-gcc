@@ -46,9 +46,9 @@ CROSS_INCLUDES := $(addprefix ${CROSS_INCLUDE_PATH}/, $(subst ${BUILD_PATH}/buil
 
 debug:
 	@echo "LIBS = ${LIBS}"
-#	@echo "INCLUDES = ${INCLUDES}"
+	@echo "INCLUDES = ${INCLUDES}"
 	@echo "CROSS_LIBS = ${CROSS_LIBS}"
-#	@echo "CROSS_INCLUDES = ${CROSS_INCLUDES}"
+	@echo "CROSS_INCLUDES = ${CROSS_INCLUDES}"
 
 all: ${BUILD_PATH}/workspace_tools/private_settings.py
 #	cd ${BUILD_PATH} && python ./workspace_tools/build.py -v -m ${MACHINE} -t ${TOOLCHAIN} -r -e -U -u
@@ -67,8 +67,7 @@ ${CROSS_LIBS}: ${CROSS_PATH}/lib/% : ${BUILD_PATH}/build/%
 	install -C -m 644 -D $< $(addprefix ${CROSS_PATH}/lib/,$(notdir $@))
 
 ${CROSS_INCLUDES}: ${CROSS_PATH}/include/% : ${BUILD_PATH}/build/%
-#	install -C -m 644 -D $< $(subst TARGET_${MACHINE},,$@)
-	install -C -m 644 -D $< $@
+	install -C -m 644 -D $< $(subst TARGET_${MACHINE},,$@)
 
 ${BUILD_PATH}/workspace_tools/private_settings.py:
 	mkdir -p ${BUILD_PATH}

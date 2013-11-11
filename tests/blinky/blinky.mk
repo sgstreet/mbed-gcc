@@ -22,6 +22,6 @@
 
 BIN_INSTALL_PATH := ${IMAGE_ROOT}
 
-BINS := blinky blinky.bin blinky.hex
+BINS := blinky.elf blinky.bin blinky.hex blinky.dis
 
 include ${MKSOURCE}
