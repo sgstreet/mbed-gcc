@@ -20,7 +20,7 @@
 #
 
 export BASE_SETTINGS = yes
-export CROSS_COMPILE := arm-none-eabi-
+export CROSS_COMPILE ?= arm-none-eabi-
 export CPP := ${CROSS_COMPILE}cpp
 export AR := ${CROSS_COMPILE}ar
 export CC := ${CROSS_COMPILE}gcc
@@ -31,14 +31,15 @@ export AS := ${CROSS_COMPILE}as
 export STRIP := ${CROSS_COMPILE}strip
 export OBJCOPY := ${CROSS_COMPILE}objcopy
 export OBJDUMP := ${CROSS_COMPILE}objdump
+export SIZE := ${CROSS_COMPILE}size
 export INSTALL := install -C
 export LD := ${CXX}
 
 export CPPFLAGS ?= -I ${CROSS_ROOT}/include
 export CFLAGS ?= -std=gnu99 -mcpu=cortex-m3 -mthumb -Wall
 export CXXFLAGS ?= -std=gnu++0x -mcpu=cortex-m3 -mthumb -Wall -fmessage-length=0 -ffunction-sections -fdata-sections -fno-exceptions -fno-delete-null-pointer-checks -specs=nano.specs
-export ASFLAGS ?=
+export ASFLAGS ?= -mcpu=cortex-m2 -mthumb
 export LDFLAGS ?= -mcpu=cortex-m3 -mthumb -specs=nano.specs -L ${CROSS_ROOT}/lib -T../../sys/libs/mbed/libraries/mbed/targets/cmsis/TARGET_NXP/TARGET_LPC176X/TOOLCHAIN_GCC_ARM/LPC1768.ld -Wl,--gc-sections
 export LDLIBS ?=  ../../sys/libs/mbed/build/mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/startup_LPC17xx.o ../../sys/libs/mbed/build/mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/cmsis_nvic.o ../../sys/libs/mbed/build/mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/system_LPC17xx.o -lnosys 
-export LOADLIBES ?= -lmbed
+export LOADLIBES ?= 
 export ARFLAGS ?= rcvs

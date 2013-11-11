@@ -19,20 +19,7 @@
 # Author: Stephen Street (stephen@redrocketcomputing.com)
 #
 
-export CPPFLAGS += -I ${CROSS_ROOT}/include/mbed
-export LDLIBES +=
+export CPPFLAGS += -DTARGET_LPC1768 -DTARGET_M3 -DTARGET_NXP -DTARGET_LPC176X -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M3 -DARM_MATH_CM3 -I ${CROSS_ROOT}/include/mbed
+export LOADLIBES += -lmbed
 
-#arm-none-eabi-g++ -mcpu=cortex-m3 -mthumb -L /home/stephen/Workspace/mbed/rootfs/lib -o blinky blinky.o 
-#../../build/sys/libs/mbed/build/mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/startup_LPC17xx.o 
-#../../build/sys/libs/mbed/build/mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/cmsis_nvic.o 
-#../../build/sys/libs/mbed/build/mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/system_LPC17xx.o  
-#-lmbed -lnosys -
-#T ../../build/sys/libs/mbed/libraries/mbed/targets/cmsis/TARGET_NXP/TARGET_LPC176X/TOOLCHAIN_GCC_ARM/LPC1768.ld
-#=============
-#$ arm-none-eabi-g++ -Os -I ../../rootfs/include/mbed -Wl,--gc-sections,-Map=blinky.map,--cref -specs=nano.specs -mcpu=cortex-m3  -mthumb blinky.o -o blinky.elf -L ../../rootfs/lib/ 
-#../../build/sys/libs/mbed/build/mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/startup_LPC17xx.o 
-#../../build/sys/libs/mbed/build/mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/cmsis_nvic.o 
-#../../build/sys/libs/mbed/build/mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/system_LPC17xx.o 
-#-lmbed -lnosys 
-#-T../../build/sys/libs/mbed/libraries/mbed/targets/cmsis/TARGET_NXP/TARGET_LPC176X/TOOLCHAIN_GCC_ARM/LPC1768.ld
 

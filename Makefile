@@ -30,6 +30,7 @@ export BUILD_ROOT ?= ${PROJECT_ROOT}/build
 export CROSS_ROOT ?= ${PROJECT_ROOT}/rootfs
 
 export MKSUPPORT_PATH := ${PROJECT_ROOT}/tools/mksupport
+export MKSOURCE := ${MKSUPPORT_PATH}/sources.mk
 export MKTARGETS := ${MKSUPPORT_PATH}/targets.mk
 
 include ${MKTARGETS}

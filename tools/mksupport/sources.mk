@@ -41,7 +41,7 @@ mkobjects = $(addsuffix /objects.mk,$(subst ${SOURCE_PATH},${BUILD_PATH},$(shell
 ${mkobjects}: ${BUILD_PATH}%/objects.mk : ${SOURCE_PATH}%
 	@echo "configuring build directory: ${@:objects.mk=}"
 	@mkdir -p ${@:objects.mk=}
-	@echo 'objects += $$(addprefix ${@:objects.mk=}, $$(addsuffix .o, $$(notdir $$(basename $$(wildcard $</*.cpp) $$(wildcard $</*.c)))))' > $@
+	@echo 'objects += $$(addprefix ${@:objects.mk=}, $$(addsuffix .o, $$(notdir $$(basename $$(wildcard $</*.cpp) $$(wildcard $</*.c) $$(wildcard $</*.s) $$(wildcard $</*.S)))))' > $@
 	@echo  >> $@
 	@echo '-include $(subst ${SOURCE_PATH},${BUILD_PATH},$(shell find $< -mindepth 1 -maxdepth 1 -type d -and -not -name ".*" -exec echo -n "{}/objects.mk " \;))' >> $@
 	@echo  >> $@
@@ -50,6 +50,12 @@ ${mkobjects}: ${BUILD_PATH}%/objects.mk : ${SOURCE_PATH}%
 	@echo >> $@
 	@echo '${@:objects.mk=}%.o : $</%.c' >> $@
 	@echo '	$${COMPILE.c} -MMD -MP -o "$$@" "$$<"' >> $@
+	@echo >> $@
+	@echo '${@:objects.mk=}%.o : $</%.s' >> $@
+	@echo '	$${COMPILE.s} -MMD -MP -o "$$@" "$$<"' >> $@
+	@echo >> $@
+	@echo '${@:objects.mk=}%.o : $</%.S' >> $@
+	@echo '	$${COMPILE.S} -MMD -MP -o "$$@" "$$<"' >> $@
 
 # Generate target makefile, need to track .dep and .settings files for rebuild
 ${BUILD_PATH}/Makefile: ${mkobjects} $(basename ${where-am-i}).mk
@@ -112,10 +118,22 @@ ${BUILD_PATH}/Makefile: ${mkobjects} $(basename ${where-am-i}).mk
 					echo >> $@; \
 				fi \
 			;; \
-			*.bin | *.hex) \
+			*.bin | *.hex | *.dis | *.map) \
 				if [ -n "${BIN_INSTALL_PATH}" ]; then \
 					echo ${BIN_INSTALL_PATH}/$$target: ${BUILD_PATH}/$$target >> $@; \
 					echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
+					echo >> $@; \
+				fi \
+			;; \
+			*.elf) \
+				echo ${BUILD_PATH}/$$target: '$${objects} $${EXTRA_DEPS}' >> $@; \
+				echo '	$${LD} -Wl,-Map=$$(basename $$@).map,--cref $${LDFLAGS} -o $$@ $${objects} $${LOADLIBES} $${LDLIBS}' >> $@; \
+				echo '	@$${SIZE} $$@' >> $@; \
+				echo >> $@; \
+				if [ -n "${BIN_INSTALL_PATH}" ]; then \
+					echo ${BIN_INSTALL_PATH}/$$target: ${BUILD_PATH}/$$target >> $@; \
+					echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
+					echo '	${INSTALL} -m 644 -D $$(basename $$^).map $$(basename $$@).map' >> $@; \
 					echo >> $@; \
 				fi \
 			;; \
@@ -134,13 +152,17 @@ ${BUILD_PATH}/Makefile: ${mkobjects} $(basename ${where-am-i}).mk
 	@echo 'all: $${BINS} $${HEADERS} $${LIBS}' >> $@
 	@echo >> $@
 	@echo 'clean:' >> $@
-	@echo '	rm -rf ${TARGETS} $${objects} $${objects:.o=.d}' >> $@
+	@echo '	rm -rf $${BINS} $${HEADERS} $${LIBS} $${objects} $${objects:.o=.d}' >> $@
 	@echo >> $@
-	@echo '%.bin: %' >> $@
+	@echo '%.bin: %.elf' >> $@
 	@echo '	$${OBJCOPY} -O binary $$< $$@' >> $@
 	@echo >> $@
-	@echo '%.hex: %' >> $@
+	@echo '%.hex: %.elf' >> $@
 	@echo '	$${OBJCOPY} -R .stack -O ihex $$< $$@' >> $@
+	@echo >> $@
+	@echo '%.dis: %.elf' >> $@
+	@echo '	$${OBJDUMP} -d -f -M reg-names-std $$< > $$@' >> $@
+	@echo >> $@
 
 all: ${BUILD_PATH}/Makefile
 	${MAKE} -C ${BUILD_PATH} all

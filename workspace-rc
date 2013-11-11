@@ -4,7 +4,11 @@ export REPOSITORY_ROOT=$WORKSPACE/repositories
 export TOOLS_ROOT=$WORKSPACE/local
 export IMAGE_ROOT=$WORKSPACE/images
 export BUILD_ROOT=$WORKSPACE/build
-export CROSS_ROOT=${WORKSPACE}/rootfs
+export CROSS_ROOT=$WORKSPACE/rootfs
+
+export MKSUPPORT_PATH=$PROJECT_ROOT/tools/mksupport
+export MKSOURCE=$MKSUPPORT_PATH/sources.mk
+export MKTARGETS=$MKSUPPORT_PATH/targets.mk
 
 export PATH=$PATH:$TOOLS_ROOT/bin
 
