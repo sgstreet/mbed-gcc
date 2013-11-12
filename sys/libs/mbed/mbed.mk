@@ -20,7 +20,6 @@
 #
 
 where-am-i := ${CURDIR}/$(lastword $(subst $(lastword ${MAKEFILE_LIST}),,${MAKEFILE_LIST}))
-$(info where-am-i=$(where-am-i) $(notdir $(where-am-i).mk))
 
 # Setup up default goal
 ifeq ($(.DEFAULT_GOAL),)
@@ -30,47 +29,54 @@ endif
 SOURCE_PATH := ${CURDIR}
 BUILD_PATH := $(subst ${PROJECT_ROOT},${BUILD_ROOT},${SOURCE_PATH})
 
-MACHINE ?= LPC1768
-TOOLCHAIN := GCC_ARM
+all: ${INSTALL_ROOT}/lib/libcore.a ${INSTALL_ROOT}/lib/librtx.a ${INSTALL_ROOT}/lib/librtos.a 
 
-ifeq ($(MAKECMDGOALS),install)
-	LIBS := $(shell find ${BUILD_PATH}/build -name "*.[ao]" -o -name "*.ld" | grep -v "\.temp")
-	INCLUDES := $(shell find ${BUILD_PATH}/build -name "*.h")
-endif
+clean: ${BUILD_PATH}/core/core.mk ${BUILD_PATH}/rtos/rtos.mk ${BUILD_PATH}/rtx/rtx.mk
+	${MAKE} BUILD_PATH=${BUILD_PATH}/build/core -C ${BUILD_PATH}/core -f core.mk clean
+	${MAKE} BUILD_PATH=${BUILD_PATH}/build/rtx -C ${BUILD_PATH}/rtx -f rtx.mk clean
+	${MAKE} BUILD_PATH=${BUILD_PATH}/build/rtos -C ${BUILD_PATH}/rtos -f rtos.mk clean
 
-CROSS_PATH := ${CROSS_ROOT}
-CROSS_INCLUDE_PATH := ${CROSS_PATH}/include
-CROSS_LIB_PATH := ${CROSS_PATH}/lib
-CROSS_LIBS := $(addprefix ${CROSS_LIB_PATH}/, $(subst ${BUILD_PATH}/build/,,${LIBS}))
-CROSS_INCLUDES := $(addprefix ${CROSS_INCLUDE_PATH}/, $(subst ${BUILD_PATH}/build/,,${INCLUDES}))
+distclean: clean
+	${MAKE} BUILD_PATH=${BUILD_PATH}/build -C ${BUILD_PATH}/core -f core.mk distclean
+	${MAKE} BUILD_PATH=${BUILD_PATH}/build/rtx -C ${BUILD_PATH}/rtx -f rtx.mk distclean
+	${MAKE} BUILD_PATH=${BUILD_PATH}/build/core -C ${BUILD_PATH}/rtos -f rtos.mk distclean
+	${RM} -rf ${BUILD_PATH}
 
 debug:
-	@echo "LIBS = ${LIBS}"
-	@echo "INCLUDES = ${INCLUDES}"
-	@echo "CROSS_LIBS = ${CROSS_LIBS}"
-	@echo "CROSS_INCLUDES = ${CROSS_INCLUDES}"
+	@echo "targets=${targets}"
 
-all: ${BUILD_PATH}/workspace_tools/private_settings.py
-#	cd ${BUILD_PATH} && python ./workspace_tools/build.py -v -m ${MACHINE} -t ${TOOLCHAIN} -r -e -U -u
-	cd ${BUILD_PATH} && python ./workspace_tools/build.py -v -m ${MACHINE} -t ${TOOLCHAIN} -r
-	${MAKE} -f ${MAKEFILE_LIST} install
+${INSTALL_ROOT}/lib/libcore.a: ${BUILD_PATH}/core/core.mk
+	${MAKE} BUILD_PATH=${BUILD_PATH}/build/core -C ${BUILD_PATH}/core -f core.mk all
 
-clean: 
-	rm -rf ${BUILD_PATH}/build
+${INSTALL_ROOT}/lib/librtos.a: ${BUILD_PATH}/rtos/rtos.mk
+	${MAKE} BUILD_PATH=${BUILD_PATH}/build/rtos -C ${BUILD_PATH}/rtos -f rtos.mk all
 
-distclean:
-	rm -rf ${BUILD_PATH}
+${INSTALL_ROOT}/lib/librtx.a: ${BUILD_PATH}/rtx/rtx.mk
+	${MAKE} BUILD_PATH=${BUILD_PATH}/build/rtx -C ${BUILD_PATH}/rtx -f rtx.mk all
 
-install: ${CROSS_LIBS} ${CROSS_INCLUDES}
+${BUILD_PATH}/core/core.mk: ${BUILD_PATH}/offical/README.md
+	mkdir -p ${BUILD_PATH}/core
+	cp ${BUILD_PATH}/offical/libraries/mbed/api/*.* ${BUILD_PATH}/core/
+	cp ${BUILD_PATH}/offical/libraries/mbed/common/* ${BUILD_PATH}/core/
+	cp ${BUILD_PATH}/offical/libraries/mbed/hal/*.* ${BUILD_PATH}/core/
+	cp ${BUILD_PATH}/offical/libraries/mbed/targets/cmsis/*.* ${BUILD_PATH}/core/
+	cp ${BUILD_PATH}/offical/libraries/mbed/targets/cmsis/TARGET_NXP/TARGET_LPC176X/*.* ${BUILD_PATH}/core/
+	cp ${BUILD_PATH}/offical/libraries/mbed/targets/cmsis/TARGET_NXP/TARGET_LPC176X/TOOLCHAIN_GCC_ARM/*.* ${BUILD_PATH}/core/
+	cp ${BUILD_PATH}/offical/libraries/mbed/targets/hal/TARGET_NXP/TARGET_LPC176X/*.* ${BUILD_PATH}/core/
+	install -m 644 ${SOURCE_PATH}/core.* ${BUILD_PATH}/core/
 
-${CROSS_LIBS}: ${CROSS_PATH}/lib/% : ${BUILD_PATH}/build/%
-	install -C -m 644 -D $< $(addprefix ${CROSS_PATH}/lib/,$(notdir $@))
+${BUILD_PATH}/rtos/rtos.mk: ${BUILD_PATH}/offical/README.md
+	mkdir -p ${BUILD_PATH}/rtos
+	cp ${BUILD_PATH}/offical/libraries/rtos/rtos/*.* ${BUILD_PATH}/rtos/
+	install -m 644 ${SOURCE_PATH}/rtos.* ${BUILD_PATH}/rtos/
 
-${CROSS_INCLUDES}: ${CROSS_PATH}/include/% : ${BUILD_PATH}/build/%
-	install -C -m 644 -D $< $(subst TARGET_${MACHINE},,$@)
+${BUILD_PATH}/rtx/rtx.mk: ${BUILD_PATH}/offical/README.md
+	mkdir -p ${BUILD_PATH}/rtx
+	cp ${BUILD_PATH}/offical/libraries/rtos/rtx/*.* ${BUILD_PATH}/rtx/
+	cp ${BUILD_PATH}/offical/libraries/rtos/rtx/TARGET_M3/TOOLCHAIN_GCC/*.* ${BUILD_PATH}/rtx/
+	install -m 644 ${SOURCE_PATH}/rtx.* ${BUILD_PATH}/rtx/
 
-${BUILD_PATH}/workspace_tools/private_settings.py:
+${BUILD_PATH}/offical/README.md:
 	mkdir -p ${BUILD_PATH}
-	cd ${BUILD_PATH} && git clone ${REPOSITORY_ROOT}/mbed.git .
-	echo 'GCC_ARM_PATH = "${TOOLS_ROOT}/bin/"' > ${BUILD_PATH}/workspace_tools/private_settings.py
+	git clone ${REPOSITORY_ROOT}/mbed ${BUILD_PATH}/offical
 
