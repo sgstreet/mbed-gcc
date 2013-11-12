@@ -44,11 +44,10 @@ $(wildcard ${REPOSITORY_ROOT}/*.git):
 
 .PHONY: distclean
 distclean:
-	@echo "target disabled"
-#	rm -rf ${BUILD_ROOT} ${CROSS_ROOT} ${IMAGE_ROOT} ${TOOLS_ROOT}
+	rm -rf ${BUILD_ROOT} ${CROSS_ROOT} ${IMAGE_ROOT}
 
 .PHONY: realclean
 realclean: distclean
 	@echo "target disabled"
-#	rm -rf ${REPOSITORY_ROOT} ${PROJECT_ROOT}/sources
+#	rm -rf ${REPOSITORY_ROOT} ${PROJECT_ROOT}/sources ${TOOLS_ROOT}
 

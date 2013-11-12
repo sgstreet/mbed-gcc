@@ -20,7 +20,6 @@
 #
 
 where-am-i := ${CURDIR}/$(lastword $(subst $(lastword ${MAKEFILE_LIST}),,${MAKEFILE_LIST}))
-$(info where-am-i=$(where-am-i) $(notdir $(where-am-i).mk))
 
 # Setup up default goal
 ifeq ($(.DEFAULT_GOAL),)

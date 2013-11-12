@@ -32,13 +32,13 @@ export STRIP := ${CROSS_COMPILE}strip
 export OBJCOPY := ${CROSS_COMPILE}objcopy
 export OBJDUMP := ${CROSS_COMPILE}objdump
 export SIZE := ${CROSS_COMPILE}size
-export INSTALL := install -C
+export INSTALL := install
 export LD := ${CXX}
 
 export CPPFLAGS ?= -I ${CROSS_ROOT}/include
 export CFLAGS ?= -std=gnu99 -mcpu=cortex-m3 -mthumb -Wall
 export CXXFLAGS ?= -std=gnu++0x -mcpu=cortex-m3 -mthumb -Wall -fmessage-length=0 -ffunction-sections -fdata-sections -fno-exceptions -fno-delete-null-pointer-checks -specs=nano.specs
-export ASFLAGS ?= -mcpu=cortex-m2 -mthumb
+export ASFLAGS ?= -mcpu=cortex-m3 -mthumb
 export LDFLAGS ?= -mcpu=cortex-m3 -mthumb -specs=nano.specs -L ${CROSS_ROOT}/lib -T ${CROSS_ROOT}/lib/LPC1768.ld -Wl,--gc-sections
 export LDLIBS ?= -lnosys 
 export LOADLIBES ?= ${CROSS_ROOT}/lib/retarget.o ${CROSS_ROOT}/lib/startup_LPC17xx.o ${CROSS_ROOT}/lib/cmsis_nvic.o ${CROSS_ROOT}/lib/system_LPC17xx.o

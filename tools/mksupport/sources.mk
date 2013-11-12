@@ -52,7 +52,7 @@ ${mkobjects}: ${BUILD_PATH}%/objects.mk : ${SOURCE_PATH}%
 	@echo '	$${COMPILE.c} -MMD -MP -o "$$@" "$$<"' >> $@
 	@echo >> $@
 	@echo '${@:objects.mk=}%.o : $</%.s' >> $@
-	@echo '	$${COMPILE.s} -MMD -MP -o "$$@" "$$<"' >> $@
+	@echo '	$${COMPILE.s} -o "$$@" "$$<"' >> $@
 	@echo >> $@
 	@echo '${@:objects.mk=}%.o : $</%.S' >> $@
 	@echo '	$${COMPILE.S} -MMD -MP -o "$$@" "$$<"' >> $@
@@ -70,89 +70,114 @@ ${BUILD_PATH}/Makefile: ${mkobjects} $(basename ${where-am-i}).mk
 		echo '$${EXTRA_DEPS}:' >> $@; \
 		echo >> $@; \
 	fi
-	@if [ -n "${BIN_INSTALL_PATH}" ]; then \
-		echo 'BINS = $$(addprefix ${BIN_INSTALL_PATH}/, ${BINS})' >> $@; \
-	else \
-		echo 'BINS := ${BINS}' >> $@; \
-	fi 
-	@if [ -n "${LIB_INSTALL_PATH}" ]; then \
-		echo 'LIBS = $$(addprefix ${LIB_INSTALL_PATH}/, ${LIBS})' >> $@; \
-	else \
-		echo 'LIBS := ${LIBS}' >> $@; \
-	fi
+	@echo 'BINS = $$(addprefix ${BUILD_PATH}/, ${BINS})' >> $@
+	@echo 'LIBS = $$(addprefix ${BUILD_PATH}/, ${LIBS})' >> $@
+	@echo 'HEADERS = $$(addprefix ${BUILD_PATH}/, ${HEADERS})' >> $@
+	@echo 'OBJS = $$(addprefix ${BUILD_PATH}/, ${OBJS})' >> $@
+	@echo 'EXTRAS = $$(addprefix ${BUILD_PATH}/, ${EXTRAS})' >> $@
+	@echo >> $@
 	@if [ -n "${INCLUDE_INSTALL_PATH}" ]; then \
-		echo 'HEADERS = $$(addprefix ${INCLUDE_INSTALL_PATH}/, ${HEADERS})' >> $@; \
+		echo 'TARGETS += $$(subst ${BUILD_PATH},${INCLUDE_INSTALL_PATH},$${HEADERS})' >> $@; \
 	else \
-		echo 'HEADERS := ${HEADERS}' >> $@; \
+		echo 'TARGETS += $${HEADERS}' >> $@; \
+	fi
+	@if [ -n "${OBJECT_INSTALL_PATH}" ]; then \
+		echo 'TARGETS += $$(subst ${BUILD_PATH},${OBJECT_INSTALL_PATH},$${OBJS})' >> $@; \
+	else \
+		echo 'TARGETS += $${OBJS}' >> $@; \
+	fi
+	@if [ -n "${LIB_INSTALL_PATH}" ]; then \
+		echo 'TARGETS += $$(subst ${BUILD_PATH},${LIB_INSTALL_PATH},$${LIBS})' >> $@; \
+	else \
+		echo 'TARGETS += $${LIBS}' >> $@; \
+	fi
+	@if [ -n "${EXTRA_INSTALL_PATH}" ]; then \
+		echo 'TARGETS += $$(subst ${BUILD_PATH},${EXTRA_INSTALL_PATH},$${EXTRAS})' >> $@; \
+	else \
+		echo 'TARGETS += $${EXTRAS}' >> $@; \
+	fi
+	@if [ -n "${BIN_INSTALL_PATH}" ]; then \
+		echo 'TARGETS += $$(subst ${BUILD_PATH},${BIN_INSTALL_PATH},$${BINS})' >> $@; \
+	else \
+		echo 'TARGETS += $${BINS}' >> $@; \
 	fi
 	@echo >> $@
-	@for target in ${BINS} ${LIBS} ${HEADERS}; do \
+	@if [ -n "${HEADERS}" ]; then \
+		echo '$${HEADERS}: ${BUILD_PATH}/% : ${SOURCE_PATH}/%' >> $@; \
+		echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
+		echo >> $@; \
+		if [ -n "${INCLUDE_INSTALL_PATH}" ]; then \
+			echo '$$(subst ${BUILD_PATH},${INCLUDE_INSTALL_PATH},$${HEADERS}): ${INCLUDE_INSTALL_PATH}/% : ${BUILD_PATH}/%' >> $@; \
+			echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
+		fi \
+	fi
+	@echo >> $@
+	@if [ -n "${OBJS}" ]; then \
+		if [ -n "${OBJECT_INSTALL_PATH}" ]; then \
+			echo '$$(subst ${BUILD_PATH},${OBJECT_INSTALL_PATH},$${OBJS}): ${OBJECT_INSTALL_PATH}/% : ${BUILD_PATH}/%' >> $@; \
+			echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
+		else \
+			echo '$${OBJS}:' >> $@; \
+		fi \
+	fi
+	@echo >> $@
+	@if [ -n "${EXTRAS}" ]; then \
+		echo '$${EXTRAS}: ${BUILD_PATH}/% : ${SOURCE_PATH}/%' >> $@; \
+		echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
+		echo >> $@; \
+		if [ -n "${EXTRA_INSTALL_PATH}" ]; then \
+			echo '$$(subst ${BUILD_PATH},${EXTRA_INSTALL_PATH},$${EXTRAS}): ${EXTRA_INSTALL_PATH}/% : ${BUILD_PATH}/%' >> $@; \
+			echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
+		fi \
+	fi
+	@echo >> $@
+	@if [ -n "${LIBS}" ]; then \
+		if [ -n "${LIB_INSTALL_PATH}" ]; then \
+			echo '$$(subst ${BUILD_PATH},${LIB_INSTALL_PATH},$${LIBS}): ${LIB_INSTALL_PATH}/% : ${BUILD_PATH}/%' >> $@; \
+			echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
+			echo >> $@; \
+		fi \
+	fi
+	@echo >> $@
+	@if [ -n "${BINS}" ]; then \
+		if [ -n "${BIN_INSTALL_PATH}" ]; then \
+			echo '$$(subst ${BUILD_PATH},${BIN_INSTALL_PATH},$${BINS}): ${BIN_INSTALL_PATH}/% : ${BUILD_PATH}/%' >> $@; \
+			echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
+			echo >> $@; \
+		fi \
+	fi
+	@echo >> $@
+	@for target in ${BINS} ${LIBS}; do \
 		case $$target in \
 			*.a) \
-				echo $$target: '$${objects}' >> $@; \
+				echo ${BUILD_PATH}/$$target: '$$(filter-out $${OBJS} $${EXTRAS}, $${objects}) $${EXTRA_DEPS}' >> $@; \
 				echo '	$${AR} $${ARFLAGS} $$@ $$^' >> $@; \
 				echo >> $@; \
-				if [ -n "${LIB_INSTALL_PATH}" ]; then \
-					echo ${LIB_INSTALL_PATH}/$$target: ${BUILD_PATH}/$$target >> $@; \
-					echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
-					echo >> $@; \
-				fi \
 			;; \
 			*.so) \
-				echo $$target: '$${objects} $${EXTRA_DEPS}' >> $@; \
+				echo ${BUILD_PATH}/$$target: '$$(filter-out $${OBJS} $${EXTRAS}, $${objects}) $${EXTRA_DEPS}' >> $@; \
 				echo '	$${LD} $${LDFLAGS} -shared -o $$@ $${objects} $${LDLIBES} $${LDLIBS}' >> $@; \
 				echo >> $@; \
-				if [ -n "${LIB_INSTALL_PATH}" ]; then \
-					echo ${LIB_INSTALL_PATH}/$$target: ${BUILD_PATH}/$$target >> $@; \
-					echo '	${INSTALL} -m 755 -D $$^ $$@' >> $@; \
-					echo >> $@; \
-				fi \
-			;; \
-			*.hpp | *.h) \
-				if [ -n "${INCLUDE_INSTALL_PATH}" ]; then \
-					echo ${INCLUDE_INSTALL_PATH}/$$target: ${SOURCE_PATH}/$$target >> $@; \
-					echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
-					echo >> $@; \
-				else \
-					echo $$target: >> $@; \
-					echo >> $@; \
-				fi \
-			;; \
-			*.bin | *.hex | *.dis | *.map) \
-				if [ -n "${BIN_INSTALL_PATH}" ]; then \
-					echo ${BIN_INSTALL_PATH}/$$target: ${BUILD_PATH}/$$target >> $@; \
-					echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
-					echo >> $@; \
-				fi \
 			;; \
 			*.elf) \
-				echo ${BUILD_PATH}/$$target: '$${objects} $${EXTRA_DEPS}' >> $@; \
+				echo ${BUILD_PATH}/$$target: '$$(filter-out ${OJBS} ${EXTRAS}, $${objects}) $${EXTRA_DEPS}' >> $@; \
 				echo '	$${LD} -Wl,-Map=$$(basename $$@).map,--cref $${LDFLAGS} -o $$@ $${objects} $${LOADLIBES} $${LDLIBS}' >> $@; \
 				echo '	@$${SIZE} $$@' >> $@; \
 				echo >> $@; \
-				if [ -n "${BIN_INSTALL_PATH}" ]; then \
-					echo ${BIN_INSTALL_PATH}/$$target: ${BUILD_PATH}/$$target >> $@; \
-					echo '	${INSTALL} -m 644 -D $$^ $$@' >> $@; \
-					echo '	${INSTALL} -m 644 -D $$(basename $$^).map $$(basename $$@).map' >> $@; \
-					echo >> $@; \
-				fi \
+			;; \
+			*.*) \
 			;; \
 			*) \
-				echo ${BUILD_PATH}/$$target: '$${objects} $${EXTRA_DEPS}' >> $@; \
+				echo ${BUILD_PATH}/$$target: '$$(filter-out ${OJBS} ${EXTRAS}, $${objects}) $${EXTRA_DEPS}' >> $@; \
 				echo '	$${LD} $${LDFLAGS} -o $$@ $${objects} $${LOADLIBES} $${LDLIBS}' >> $@; \
 				echo >> $@; \
-				if [ -n "${BIN_INSTALL_PATH}" ]; then \
-					echo ${BIN_INSTALL_PATH}/$$target: ${BUILD_PATH}/$$target >> $@; \
-					echo '	${INSTALL} -m 755 -D $$^ $$@' >> $@; \
-					echo >> $@; \
-				fi \
 			;; \
 		esac; \
 	done
-	@echo 'all: $${BINS} $${HEADERS} $${LIBS}' >> $@
+	@echo 'all: $${TARGETS}' >> $@
 	@echo >> $@
 	@echo 'clean:' >> $@
-	@echo '	rm -rf $${BINS} $${HEADERS} $${LIBS} $${objects} $${objects:.o=.d}' >> $@
+	@echo '	rm -rf ${TARGETS} $${BINS} $${HEADERS} $${LIBS} $${OBJS} $${EXTRAS} $${objects} $${objects:.o=.d}' >> $@
 	@echo >> $@
 	@echo '%.bin: %.elf' >> $@
 	@echo '	$${OBJCOPY} -O binary $$< $$@' >> $@
@@ -185,5 +210,13 @@ distclean:
 		echo rm -rf $(addprefix ${INCLUDE_INSTALL_PATH}/, ${HEADERS}); \
 		rm -rf $(addprefix ${INCLUDE_INSTALL_PATH}/, ${HEADERS}); \
 	fi
-	rm -rf ${BUILD_PATH} ${_bins} ${_libs} ${_incs} 
+	@if [ -n "${OBJECT_INSTALL_PATH}" ]; then \
+		echo rm -rf $(addprefix ${OBJECT_INSTALL_PATH}/, ${OBJS}); \
+		rm -rf $(addprefix ${OBJECT_INSTALL_PATH}/, ${OBJS}); \
+	fi
+	@if [ -n "${EXTRA_INSTALL_PATH}" ]; then \
+		echo rm -rf $(addprefix ${EXTRA_INSTALL_PATH}/, ${EXTRAS}); \
+		rm -rf $(addprefix ${EXTRA_INSTALL_PATH}/, ${EXTRAS}); \
+	fi
+	rm -rf ${BUILD_PATH}
 
