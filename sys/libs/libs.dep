@@ -1,2 +1,2 @@
-targets: core rtx rtos
+targets: mbed
 
