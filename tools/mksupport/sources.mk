@@ -26,7 +26,7 @@ ifeq ($(.DEFAULT_GOAL),)
 endif
 
 SOURCE_PATH := ${CURDIR}
-BUILD_PATH := $(subst ${PROJECT_ROOT},${BUILD_ROOT},${SOURCE_PATH})
+BUILD_PATH ?= $(subst ${PROJECT_ROOT},${BUILD_ROOT},${SOURCE_PATH})
 
 # Try to include base setting file
 -include ${PROJECT_ROOT}/Makefile.settings
