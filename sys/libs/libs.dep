@@ -1,1 +1,1 @@
-targets: core rtos lcd
+targets: core rtos lcd mma7660
