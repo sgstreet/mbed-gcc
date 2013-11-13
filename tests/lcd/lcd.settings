@@ -19,9 +19,9 @@
 # Author: Stephen Street (stephen@redrocketcomputing.com)
 #
 
-export CPPFLAGS += -DTARGET_LPC1768 -DTARGET_M3 -DTARGET_NXP -DTARGET_LPC176X -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M3 -DARM_MATH_CM3 -I ${CROSS_ROOT}/include -I ${CROSS_ROOT}/include/rtos -I ${CROSS_ROOT}/include/rtx
-export CFLAGS += -Os
-export CXXFLAGS += -Os
-export LOADLIBES += -lrtos -lrtx -lcore
+export CPPFLAGS += -DTARGET_LPC1768 -DTARGET_M3 -DTARGET_NXP -DTARGET_LPC176X -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M3 -DARM_MATH_CM3 -I ${CROSS_ROOT}/include
+export CFLAGS += -O2 -Wno-missing-braces
+export CXXFLAGS += -O2 -Wno-missing-braces
+export LOADLIBES += -llcd -lcore
 
 

@@ -15,19 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
-# code-template.mk
+# blinky.mk
 # Created on: 21/07/13
 # Author: Stephen Street (stephen@redrocketcomputing.com)
 #
 
-LIBS := libcore.a
-HEADERS := $(subst ${CURDIR}/,,$(shell find ${CURDIR} -name "*.h" -o -name "*.hpp"))
-OBJS := cmsis_nvic.o retarget.o startup_LPC17xx.o system_LPC17xx.o
-EXTRAS := LPC1768.ld
+BIN_INSTALL_PATH := ${IMAGE_ROOT}
 
-LIB_INSTALL_PATH := ${CROSS_ROOT}/lib
-INCLUDE_INSTALL_PATH := ${CROSS_ROOT}/include
-OBJECT_INSTALL_PATH := ${LIB_INSTALL_PATH}
-EXTRA_INSTALL_PATH := ${LIB_INSTALL_PATH}
+BINS := lcd.elf lcd.bin lcd.map lcd.dis
 
 include ${MKSOURCE}

@@ -1,6 +1,7 @@
-#
 # Copyright (C) 2013 Red Rocket Computing
 # 
+# This file is part of AppFramework.
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
@@ -14,12 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
-# rtx.settings
-# Created on: 07/11/13
+# makefile.mk
+# Created on: 11/11/13
 # Author: Stephen Street (stephen@redrocketcomputing.com)
 #
 
-export CPPFLAGS += -DTARGET_LPC1768 -DTARGET_M3 -DTARGET_NXP -DTARGET_LPC176X -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M3 -DARM_MATH_CM3 -I ${CROSS_ROOT}/include
-export CFLAGS += -Os
-export CXXFLAGS += -Os
+LIBS := liblcd.a
+HEADERS := $(subst ${CURDIR}/,,$(shell find ${CURDIR} -name "*.h" -o -name "*.hpp"))
 
+LIB_INSTALL_PATH := ${CROSS_ROOT}/lib
+INCLUDE_INSTALL_PATH := ${CROSS_ROOT}/include/lcd
+
+include ${MKSOURCE}

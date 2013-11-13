@@ -1,6 +1,7 @@
-#
 # Copyright (C) 2013 Red Rocket Computing
 # 
+# This file is part of AppFramework.
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
@@ -14,14 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
-# blinky.settings
-# Created on: 07/11/13
+# pots.mk
+# Created on: 21/07/13
 # Author: Stephen Street (stephen@redrocketcomputing.com)
 #
 
-export CPPFLAGS += -DTARGET_LPC1768 -DTARGET_M3 -DTARGET_NXP -DTARGET_LPC176X -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M3 -DARM_MATH_CM3 -I ${CROSS_ROOT}/include -I ${CROSS_ROOT}/include/rtos -I ${CROSS_ROOT}/include/rtx
-export CFLAGS += -Os
-export CXXFLAGS += -Os
-export LOADLIBES += -lrtos -lrtx -lcore
+BIN_INSTALL_PATH := ${IMAGE_ROOT}
 
+BINS := pots.elf pots.bin pots.map pots.dis
 
+include ${MKSOURCE}

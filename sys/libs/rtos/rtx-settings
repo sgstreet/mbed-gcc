@@ -14,14 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 
-# blinky.settings
+# rtx.settings
 # Created on: 07/11/13
 # Author: Stephen Street (stephen@redrocketcomputing.com)
 #
 
-export CPPFLAGS += -DTARGET_LPC1768 -DTARGET_M3 -DTARGET_NXP -DTARGET_LPC176X -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M3 -DARM_MATH_CM3 -I ${CROSS_ROOT}/include -I ${CROSS_ROOT}/include/rtos -I ${CROSS_ROOT}/include/rtx
+export CPPFLAGS += -DTARGET_LPC1768 -DTARGET_M3 -DTARGET_NXP -DTARGET_LPC176X -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M3 -DARM_MATH_CM3 -I ${BUILD_PATH}/rtx
 export CFLAGS += -Os
 export CXXFLAGS += -Os
-export LOADLIBES += -lrtos -lrtx -lcore
-
 

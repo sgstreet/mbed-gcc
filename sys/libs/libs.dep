@@ -1,2 +1,1 @@
-targets: mbed
-
+targets: core rtos lcd

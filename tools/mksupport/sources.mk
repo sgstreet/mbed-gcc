@@ -35,7 +35,7 @@ BUILD_PATH ?= $(subst ${PROJECT_ROOT},${BUILD_ROOT},${SOURCE_PATH})
 -include $(basename ${where-am-i}).settings
 
 # Find all subdirectories with source code
-mkobjects = $(addsuffix /objects.mk,$(subst ${SOURCE_PATH},${BUILD_PATH},$(shell find ${SOURCE_PATH} -type d -and -not -name ".*")))
+mkobjects = $(addsuffix /objects.mk,$(subst ${SOURCE_PATH},${BUILD_PATH},$(shell find ${SOURCE_PATH} -type d -and -not -name ".*" | grep -v ".git")))
 
 # Generate object makefiles
 ${mkobjects}: ${BUILD_PATH}%/objects.mk : ${SOURCE_PATH}%

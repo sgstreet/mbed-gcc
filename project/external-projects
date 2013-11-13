@@ -1,6 +1,9 @@
 git://github.com/mbedmicro/CMSIS-DAP
 git://github.com/adamgreen/gcc4mbed
-git://github.com/mbedmicro/mbed
 git://github.com/adamgreen/mri
 git://github.com/mbedmicro/pyOCD
+hg::http://mbed.org/teams/mbed/code/WiflyInterface
+hg::http://mbed.org/users/dreschpe/code/C12832_lcd
+hg::http://mbed.org/users/dreschpe/code/LCD_fonts
+hg::http://mbed.org/users/mbed_official/code/mbed-src
 
