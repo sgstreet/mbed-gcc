@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo -n "" > $PROJECT_ROOT/project/external-projects
+for repo in $(find $REPOSITORY_ROOT -name "*.git"); do
+	echo found $(basename $repo) with url $(git --git-dir=$repo config remote.origin.url)
+	echo $(git --git-dir=$repo config remote.origin.url) >> $PROJECT_ROOT/project/external-projects
+done
