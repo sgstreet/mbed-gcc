@@ -1,0 +1,13 @@
+diff --git a/Socket/UDPSocket.h b/Socket/UDPSocket.h
+index a7ea055..992bc47 100644
+--- a/Socket/UDPSocket.h
++++ b/Socket/UDPSocket.h
+@@ -22,7 +22,7 @@
+ #include "Endpoint.h"
+ #include "Socket.h"
+ 
+-#include <cstdint>
++#include <stdint.h>
+ 
+ /**
+ UDP Socket

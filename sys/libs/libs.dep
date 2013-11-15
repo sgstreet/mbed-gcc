@@ -1,1 +1,12 @@
-targets: core rtos lcd mma7660 lm75b
+targets: rtos lcd mma7660 lm75b wiflyif
+
+rtos: core
+
+lcd: core
+
+mm7660: core
+
+lm75b: core
+
+
+
