@@ -2,13 +2,16 @@ hg::http://mbed.org/users/dreschpe/code/LCD_fonts
 hg::http://mbed.org/users/mbed_official/code/EthernetInterface
 hg::http://mbed.org/users/mbed_official/code/lwip-eth
 hg::http://mbed.org/users/mbed_official/code/lwip-sys
+git://github.com/xively/libxively.git
 hg::http://mbed.org/users/mbed_official/code/lwip
 hg::http://mbed.org/users/mbed_official/code/mbed-rtos
 git://github.com/mbedmicro/CMSIS-DAP
 hg::http://mbed.org/users/dreschpe/code/C12832_lcd
 hg::http://mbed.org/users/mbed_official/code/WiflyInterface
 git://github.com/adamgreen/mri
+hg::http://mbed.org/users/xively/code/libxively-develop
 git://github.com/mbedmicro/pyOCD
+git://github.com/walac/pyusb
 git://github.com/adamgreen/gcc4mbed
 hg::http://mbed.org/users/mbed_official/code/mbed-src
 hg::http://mbed.org/users/mbed_official/code/Socket
