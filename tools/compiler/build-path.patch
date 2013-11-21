@@ -1,0 +1,13 @@
+diff --git a/compilers/gcc-arm-embedded/gcc-arm-embedded.mk b/compilers/gcc-arm-embedded/gcc-arm-embedded.mk
+index 23dfbfc..29432d3 100644
+--- a/compilers/gcc-arm-embedded/gcc-arm-embedded.mk
++++ b/compilers/gcc-arm-embedded/gcc-arm-embedded.mk
+@@ -27,7 +27,7 @@ ifeq ($(.DEFAULT_GOAL),)
+ endif
+ 
+ SOURCE_PATH := ${CURDIR}
+-BUILD_PATH := $(subst ${PROJECT_ROOT},${BUILD_ROOT},${SOURCE_PATH})
++BUILD_PATH ?= $(subst ${PROJECT_ROOT},${BUILD_ROOT},${SOURCE_PATH})
+ IMAGE_PATH := ${IMAGE_ROOT}
+ DOWNLOAD_PATH := ${REPOSITORY_ROOT}/sources
+ 

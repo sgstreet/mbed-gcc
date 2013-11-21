@@ -19,7 +19,7 @@
 # Author: Stephen Street (stephen@redrocketcomputing.com)
 #
 
-EXCLUDEGOALS = distclean realclean update $(wildcard ${REPOSITORY_ROOT}/*.git)
+EXCLUDEGOALS = distclean realclean update tools $(wildcard ${REPOSITORY_ROOT}/*.git)
 
 export WORKSPACE ?= ${CURDIR}
 export PROJECT_ROOT ?= ${CURDIR}
@@ -38,6 +38,10 @@ include ${MKTARGETS}
 .PHONY: update
 update: ${REPOSITORY_ROOT} $(wildcard ${REPOSITORY_ROOT}/*.git)
 
+.PHONY: tools
+tools: ${REPOSITORY_ROOT}
+	${MAKE} -C tools -f tools.mk all
+
 .PHONY: $(wildcard ${REPOSITORY_ROOT}/*.git)
 $(wildcard ${REPOSITORY_ROOT}/*.git):
 	git --git-dir=$@ fetch -p
@@ -48,6 +52,5 @@ distclean:
 
 .PHONY: realclean
 realclean: distclean
-	@echo "target disabled"
-#	rm -rf ${REPOSITORY_ROOT} ${PROJECT_ROOT}/sources ${TOOLS_ROOT}
+	rm -rf ${REPOSITORY_ROOT} ${TOOLS_ROOT} ${PROJECT_ROOT}/eclipse
 

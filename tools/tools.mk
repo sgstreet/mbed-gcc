@@ -19,6 +19,6 @@
 # Author: Stephen Street
 #
 
-SUBDIRS = 
+SUBDIRS = scripts compiler pyocd
 
 include ${MKTARGETS}

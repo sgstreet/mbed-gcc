@@ -1,4 +1,4 @@
-targets: sys tests
+targets: ${REPOSITORY_ROOT} sys tests
 
 ${REPOSITORY_ROOT}:
 	mkdir -p ${REPOSITORY_ROOT}
