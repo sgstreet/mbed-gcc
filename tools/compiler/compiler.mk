@@ -39,19 +39,20 @@ distclean: clean
 realclean: distclean
 	${RM} -rf ${TOOLS_ROOT}/share/gcc-arm-none-eabi-4_7-linux.tar.bz2 ${BUILD_PATH}
 
+${TOOLS_ROOT}/etc/softlinked-gcc-arm-none-eabi-4_7: ${TOOLS_ROOT}/libexec/gcc-arm-none-eabi-4_7/bin/arm-none-eabi-gcc
+	${TOOLS_ROOT}/bin/softlink-toolchain gcc-arm-none-eabi-4_7
+
 ${TOOLS_ROOT}/libexec/gcc-arm-none-eabi-4_7/bin/arm-none-eabi-gcc: ${TOOLS_ROOT}/share/gcc-arm-none-eabi-4_7-linux.tar.bz2 
 	mkdir -p ${TOOLS_ROOT}/libexec
 	tar -C ${TOOLS_ROOT}/libexec -mxf ${TOOLS_ROOT}/share/gcc-arm-none-eabi-4_7-linux.tar.bz2
 
-${TOOLS_ROOT}/etc/softlinked-gcc-arm-none-eabi-4_7: ${TOOLS_ROOT}/libexec/gcc-arm-none-eabi-4_7/bin/arm-none-eabi-gcc
-	${TOOLS_ROOT}/bin/softlink-toolchain gcc-arm-none-eabi-4_7
-
-${TOOLS_ROOT}/share/gcc-arm-none-eabi-4_7-linux.tar.bz2: ${BUILD_PATH}/LICENSE
-	${MAKE} -C ${BUILD_PATH} -f Makefile BUILD_PATH=${BUILD_PATH}/build IMAGE_ROOT=${TOOLS_ROOT}/share GOAL=all compilers/gcc-arm-embedded 
-
-${BUILD_PATH}/LICENSE:
-	git clone ${REPOSITORY_ROOT}/toolchains ${BUILD_PATH}
-	cd ${BUILD_PATH} && patch -p1 < ${SOURCE_PATH}/build-path.patch
-
+${TOOLS_ROOT}/share/gcc-arm-none-eabi-4_7-linux.tar.bz2:
+	@if [ ! -e "${@}" ]; then \
+		if [ ! -e "${BUILD_PATH}" ]; then \
+			git clone ${REPOSITORY_ROOT}/toolchains ${BUILD_PATH}; \
+			cd ${BUILD_PATH} && patch -p1 < ${SOURCE_PATH}/build-path.patch; \
+		fi; \
+		${MAKE} -C ${BUILD_PATH} -f Makefile BUILD_PATH=${BUILD_PATH}/build IMAGE_ROOT=${TOOLS_ROOT}/share GOAL=all compilers/gcc-arm-embedded; \
+	fi
 
 
